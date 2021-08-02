@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwt.demo.mapper.ScoreMapper" >
+  <resultMap id="BaseResultMap" type="com.zwt.demo.model.ScoreModel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="stu_no" property="stuNo" jdbcType="VARCHAR" />
+    <result column="cou_no" property="couNo" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, stu_no, cou_no, score
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zwt.demo.model.ScoreCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from score
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="mysqlOffset != null and mysqlLength != null" >
+      <![CDATA[ limit #{mysqlOffset} , #{mysqlLength} ]]>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from score
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from score
+    where id = #{id}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zwt.demo.model.ScoreCriteria" >
+    delete from score
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zwt.demo.model.ScoreModel" >
+    insert into score (id, stu_no, cou_no, score)
+    values (#{id}, #{stuNo}, #{couNo}, #{score})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zwt.demo.model.ScoreModel" >
+    insert into score
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="stuNo != null" >
+        stu_no,
+      </if>
+      <if test="couNo != null" >
+        cou_no,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="stuNo != null" >
+        #{stuNo},
+      </if>
+      <if test="couNo != null" >
+        #{couNo},
+      </if>
+      <if test="score != null" >
+        #{score},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into score (id, stu_no, cou_no, score)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=INTEGER}, #{item.stuNo,jdbcType=VARCHAR}, #{item.couNo,jdbcType=VARCHAR},#{item.score,jdbcType=DECIMAL})
+    </foreach>
+  </insert>
+
+  <select id="countByExample" parameterType="com.zwt.demo.model.ScoreCriteria" resultType="java.lang.Integer" >
+    select count(*) from score
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update score
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id},
+      </if>
+      <if test="record.stuNo != null" >
+        stu_no = #{record.stuNo},
+      </if>
+      <if test="record.couNo != null" >
+        cou_no = #{record.couNo},
+      </if>
+      <if test="record.score != null" >
+        score = #{record.score},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update score
+    set id = #{record.id},
+      stu_no = #{record.stuNo},
+      cou_no = #{record.couNo},
+      score = #{record.score}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwt.demo.model.ScoreModel" >
+    update score
+    <set >
+      <if test="stuNo != null" >
+        stu_no = #{stuNo},
+      </if>
+      <if test="couNo != null" >
+        cou_no = #{couNo},
+      </if>
+      <if test="score != null" >
+        score = #{score},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zwt.demo.model.ScoreModel" >
+    update score
+    set stu_no = #{stuNo},
+      cou_no = #{couNo},
+      score = #{score}
+    where id = #{id}
+  </update>
+
+  <update id="updateScore">
+    update score set score = #{score} where stu_no = #{stuNo} and cou_no = #{couNo}
+  </update>
+  <cache-ref namespace="com.zwt.demo.mapper.StudentMapper"></cache-ref>
+</mapper>
